@@ -1,0 +1,22 @@
+# docker-compose.prod.yml
+# Use with: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+version: '3.9'
+
+services:
+  backend:
+    environment:
+      NODE_ENV    : production
+      DATABASE_URL: ${DATABASE_URL}        # from .env or AWS secrets
+      REDIS_URL   : ${REDIS_URL}
+      JWT_SECRET  : ${JWT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+    command: npm start
+    volumes: []                            # no volume mounts in production
+
+  frontend:
+    build:
+      target: production                   # use production build stage
+    volumes: []
+    environment:
+      VITE_API_URL: ${VITE_API_URL}

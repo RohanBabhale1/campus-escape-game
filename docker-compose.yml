@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 services:
   clubverse-db:
     image: postgres:15
@@ -60,3 +61,97 @@ volumes:
 networks:
   clubverse-network:
     driver: bridge
+=======
+# docker-compose.yml — Starts everything locally with one command:
+# docker-compose up --build
+
+version: '3.9'
+
+services:
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: escape_room_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER    : escape_user
+      POSTGRES_PASSWORD: escape_pass
+      POSTGRES_DB      : escape_room_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test    : ["CMD-SHELL", "pg_isready -U escape_user -d escape_room_db"]
+      interval: 5s
+      timeout : 5s
+      retries : 5
+
+  # ── Redis ──────────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: escape_room_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test    : ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout : 3s
+      retries : 5
+
+  # ── Backend (Node.js) ──────────────────────────────────────────────────────
+  backend:
+    build:
+      context   : ./backend
+      dockerfile: Dockerfile
+      target    : development     
+    container_name: escape_room_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV    : development
+      PORT        : 5000
+      DATABASE_URL: postgresql://escape_user:escape_pass@postgres:5432/escape_room_db
+      REDIS_URL   : redis://redis:6379
+      JWT_SECRET  : dev_secret_change_in_production_please_32chars
+      FRONTEND_URL: http://localhost:3000
+    ports:
+      - "0.0.0.0:5000:5000"     # ← same fix for backend
+    volumes:
+      # Hot-reload in dev: mount source, not node_modules
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
+  # ── Frontend (React + Vite) ────────────────────────────────────────────────
+  frontend:
+    build:
+      context   : ./frontend
+      dockerfile: Dockerfile
+      target    : development
+    container_name: escape_room_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:5000/api    # browser-side, uses localhost
+    ports:
+      - "3000:3000"   # ← FIX: explicit binding for Windows
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  postgres_data:
+  redis_data:
+>>>>>>> cd687cd30c5fe9f08e051755f594f410cd7f634e
