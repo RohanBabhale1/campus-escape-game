@@ -1,0 +1,91 @@
+/* @import MUST come before @tailwind — browser ignores @import after any CSS rule */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #0a0a0f;
+  color: #e0e0e0;
+}
+
+@layer utilities {
+  .text-glow-magenta { text-shadow: 0 0 8px #FF00FF, 0 0 20px #FF00FF; }
+  .text-glow-cyan    { text-shadow: 0 0 8px #00FFFF, 0 0 20px #00FFFF; }
+  .text-glow-yellow  { text-shadow: 0 0 8px #FFFF00, 0 0 20px #FFFF00; }
+  .text-glow-green   { text-shadow: 0 0 8px #00FF41, 0 0 20px #00FF41; }
+
+  .pixel-border-magenta { border: 2px solid #FF00FF; box-shadow: 0 0 8px #FF00FF; }
+  .pixel-border-cyan    { border: 2px solid #00FFFF; box-shadow: 0 0 8px #00FFFF; }
+
+  .glass-panel {
+    background:      rgba(10, 10, 20, 0.85);
+    backdrop-filter: blur(8px);
+    border:          1px solid rgba(255, 0, 255, 0.3);
+  }
+
+  .scanlines::before {
+    content:    '';
+    position:   fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+}
+
+@layer components {
+  .btn-neon {
+    @apply font-pixel text-pixel-xs uppercase tracking-wider px-6 py-3
+           border-2 rounded-full cursor-pointer transition-all duration-200
+           active:scale-95;
+  }
+
+  .btn-neon-magenta {
+    @apply btn-neon border-neon-magenta text-neon-magenta
+           hover:bg-neon-magenta hover:text-void;
+    box-shadow: 0 0 8px #FF00FF;
+  }
+  .btn-neon-magenta:hover { box-shadow: 0 0 20px #FF00FF, 0 0 40px #FF00FF; }
+
+  .btn-neon-cyan {
+    @apply btn-neon border-neon-cyan text-neon-cyan
+           hover:bg-neon-cyan hover:text-void;
+    box-shadow: 0 0 8px #00FFFF;
+  }
+  .btn-neon-cyan:hover { box-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF; }
+
+  .btn-neon-yellow {
+    @apply btn-neon border-neon-yellow text-neon-yellow
+           hover:bg-neon-yellow hover:text-void;
+    box-shadow: 0 0 8px #FFFF00;
+  }
+
+  .input-neon {
+    @apply w-full bg-void border border-neon-magenta text-white
+           font-mono px-4 py-3 rounded-sm outline-none
+           focus:border-neon-magenta transition-colors;
+    box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.05);
+  }
+  .input-neon:focus { box-shadow: 0 0 10px rgba(255, 0, 255, 0.3); }
+}
+
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0f; }
+::-webkit-scrollbar-thumb { background: #FF00FF; border-radius: 3px; }
