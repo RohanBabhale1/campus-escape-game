@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  clubverse-db:
+    image: postgres:15
+    container_name: clubverse-db
+    environment:
+      POSTGRES_USER: clubuser
+      POSTGRES_PASSWORD: clubpassword
+      POSTGRES_DB: clubversedb
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/init-scripts:/docker-entrypoint-initdb.d
+volumes:
+  postgres_data:
