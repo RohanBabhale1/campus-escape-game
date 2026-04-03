@@ -42,6 +42,31 @@ const useGameStore = create(
             r.slug === slug ? { ...r, ...update } : r,
           ),
         })),
+        
+      completeRoomFrontend: (slug) =>
+        set((s) => {
+          const currentIndex = s.rooms.findIndex((r) => r.slug === slug);
+          if (currentIndex === -1) return s;
+          
+          const newRooms = [...s.rooms];
+          newRooms[currentIndex] = { ...newRooms[currentIndex], is_completed: true, key_collected: true };
+          
+          let newGameCompleted = s.gameCompleted;
+
+          // Unlock the strictly next room in visual sequence
+          if (currentIndex + 1 < newRooms.length && newRooms[currentIndex + 1].slug !== "final") {
+            newRooms[currentIndex + 1] = { ...newRooms[currentIndex + 1], is_unlocked: true };
+          } else if (currentIndex + 1 < newRooms.length && newRooms[currentIndex + 1].slug === "final") {
+             // Unlock final escape room if this was the last puzzle
+            const totalDone = newRooms.filter(r => r.is_completed && r.slug !== "final").length;
+            if (totalDone >= 8) {
+               newRooms[currentIndex + 1] = { ...newRooms[currentIndex + 1], is_unlocked: true };
+               // Fire victory exactly here before returning
+               if (!s.gameCompleted) newGameCompleted = true;
+            }
+          }
+          return { rooms: newRooms, gameCompleted: newGameCompleted };
+        }),
 
       // ── Inventory ─────────────────────────────────────────────────────────────
       inventory: [],
@@ -51,6 +76,7 @@ const useGameStore = create(
             ? s.inventory
             : [...s.inventory, roomSlug],
         })),
+      updateInventory: (inv) => set({ inventory: inv }),
 
       // ── Scene ─────────────────────────────────────────────────────────────────
       activeScene: "lobby",
@@ -60,8 +86,6 @@ const useGameStore = create(
         set({ currentRoom: room, activeScene: `room:${room.slug}` }),
 
       // FIX: also clear activePuzzle when exiting a room.
-      // Previously the puzzle overlay stayed visible after pressing Q, making the
-      // game appear frozen until reload.
       exitRoom: () =>
         set({ currentRoom: null, activeScene: "lobby", activePuzzle: null }),
 
@@ -80,6 +104,7 @@ const useGameStore = create(
             },
           },
         })),
+      resetPuzzleStates: () => set({ puzzleStates: {} }),
 
       // ── Player world position (for door/puzzle proximity without camera offset) ─
       playerPosition: { x: 0, y: 2, z: 8 },
@@ -92,8 +117,12 @@ const useGameStore = create(
       // ── UI flags ──────────────────────────────────────────────────────────────
       isPaused: false,
       gameCompleted: false,
+      canInteract: false,
+      spawnNode: 'default',
       setPaused: (v) => set({ isPaused: v }),
       setGameCompleted: (v) => set({ gameCompleted: v }),
+      setCanInteract: (v) => set({ canInteract: v }),
+      setSpawnNode: (v) => set({ spawnNode: v }),
     }),
     {
       name: "escape-room-game-state",

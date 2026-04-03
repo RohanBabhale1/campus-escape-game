@@ -1,14 +1,19 @@
 import React from "react";
 import ControlsOverlay from "./ControlsOverlay";
 import Inventory from "./Inventory";
-import ObjectiveTracker from "./ObjectiveTracker";
 import InteractionPrompt from "./InteractionPrompt";
+
+import { useNavigate } from "react-router-dom";
+import useGameStore from "../../store/useGameStore";
 
 // ✅ FIX: use inline styles instead of Tailwind positioning classes.
 //    If the CSS bundle is slow to load, Tailwind classes silently fail.
 //    Inline styles always apply immediately.
 
 export default function HUD() {
+  const navigate = useNavigate();
+  const logout = useGameStore((s) => s.logout);
+
   return (
     <>
       {/* Top-left: controls reference */}
@@ -24,31 +29,34 @@ export default function HUD() {
         <ControlsOverlay />
       </div>
 
-      {/* Top-right: key inventory */}
+      {/* Top-right: key inventory and logout */}
       <div
         style={{
           position: "absolute",
           top: "1rem",
           right: "1rem",
-          pointerEvents: "none",
+          pointerEvents: "auto", // allow clicking logout
           zIndex: 20,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "10px"
         }}
       >
+        <button
+          onClick={() => {
+            logout();
+            navigate("/login");
+          }}
+          className="btn-neon-magenta text-pixel-xs px-3 py-1"
+          style={{ width: "fit-content" }}
+        >
+          SIGN OUT
+        </button>
         <Inventory />
       </div>
 
-      {/* Bottom-left: objective tracker */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "6rem",
-          left: "1rem",
-          pointerEvents: "none",
-          zIndex: 20,
-        }}
-      >
-        <ObjectiveTracker />
-      </div>
+
 
       {/* Bottom-center: interaction prompt */}
       <div

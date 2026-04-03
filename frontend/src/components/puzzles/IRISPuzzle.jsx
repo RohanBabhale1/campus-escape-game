@@ -16,7 +16,7 @@ export default function IRISPuzzle() {
     "Connect the circuit: PWR → AMP → CPU → OUT",
   );
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleNode = async (id) => {
     if (solved) return;
@@ -29,7 +29,7 @@ export default function IRISPuzzle() {
         setMessage("CIRCUIT COMPLETE! Key acquired!");
         solvePuzzle("iris", "circuit_puzzle");
         addKey("iris");
-        updateRoom("iris", { is_completed: true, key_collected: true });
+        completeRoomFrontend("iris");
         try {
           await roomAPI.completeRoom("iris", { timeTaken: 80 });
         } catch (_) {}

@@ -45,7 +45,7 @@ export default function InQuizitivePuzzle() {
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState(null);
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleAnswer = async (optIdx) => {
     if (selected !== null) return;

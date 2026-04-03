@@ -20,7 +20,7 @@ export default function VelocityPuzzle() {
     "Click the SDLC stages in the correct order.",
   );
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleSelect = async (card) => {
     if (solved || selected.includes(card)) return;
@@ -44,7 +44,7 @@ export default function VelocityPuzzle() {
       setMessage("CORRECT ORDER! Key acquired!");
       solvePuzzle("velocity", "sdlc_order");
       addKey("velocity");
-      updateRoom("velocity", { is_completed: true, key_collected: true });
+      completeRoomFrontend("velocity");
       try {
         await roomAPI.completeRoom("velocity", { timeTaken: 90 });
       } catch (_) {}

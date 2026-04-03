@@ -9,7 +9,7 @@ export default function TechnosysPuzzle() {
   const [input, setInput] = useState("");
   const [message, setMessage] = useState("");
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleSubmit = async () => {
     if (input.trim().toUpperCase() === ANSWER) {
@@ -17,7 +17,7 @@ export default function TechnosysPuzzle() {
       setMessage("CORRECT! Key acquired!");
       solvePuzzle("technosys", "binary_puzzle");
       addKey("technosys");
-      updateRoom("technosys", { is_completed: true, key_collected: true });
+      completeRoomFrontend("technosys");
       try {
         await roomAPI.completeRoom("technosys", { timeTaken: 120 });
       } catch (_) {}

@@ -18,8 +18,8 @@ import { useKeyboard } from "../../hooks/useKeyboard";
 
 // Spawn away from the magenta CentrePillar which sits at [0, 5, 0]
 const SPAWN = [0, 2.5, 8];
-const WALK_SPEED = 7;
-const SPRINT_SPEED = 12;
+const WALK_SPEED = 8;
+const SPRINT_SPEED = 14;
 const JUMP_VEL = 9;
 const EYE_HEIGHT = 1.6; // camera offset above rigid-body centre
 
@@ -44,8 +44,8 @@ export default function Player() {
       if (document.pointerLockElement !== canvas) return;
       yaw.current -= e.movementX * 0.002;
       pitch.current = Math.max(
-        -1.0,
-        Math.min(0.45, pitch.current - e.movementY * 0.002),
+        -1.5,
+        Math.min(1.5, pitch.current - e.movementY * 0.002),
       );
     };
 
@@ -85,6 +85,17 @@ export default function Player() {
       document.exitPointerLock();
     }
   }, [activePuzzle, isPaused]);
+
+  // ── KEY FIX: Stop falling through floor when scene swaps ────────
+  const activeScene = useGameStore((s) => s.activeScene);
+  useEffect(() => {
+    if (rigidBodyRef.current) {
+      // Instantly teleport to safe spawn and zero out velocity when 
+      // tearing down old rooms and rendering new ones
+      rigidBodyRef.current.setTranslation({ x: SPAWN[0], y: SPAWN[1], z: SPAWN[2] }, true);
+      rigidBodyRef.current.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    }
+  }, [activeScene]);
 
   // ── Per-frame: camera + movement ─────────────────────────────────────────
   useFrame(() => {
@@ -157,7 +168,7 @@ export default function Player() {
       mass={70}
       friction={0}
       restitution={0}
-      linearDamping={12} // high damping → snappy stop when keys released
+      linearDamping={15} // high damping → snappy stop when keys released
       colliders={false} // we provide our own collider below
     >
       {/* Capsule collider: halfHeight=0.5, radius=0.4 → total height ≈ 1.8 */}

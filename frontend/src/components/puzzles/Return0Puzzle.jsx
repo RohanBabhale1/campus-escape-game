@@ -47,7 +47,7 @@ export default function Return0Puzzle() {
   const [bugIdx, setBugIdx] = useState(0);
   const [message, setMessage] = useState("Click the buggy line!");
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleLineClick = async (lineIdx) => {
     if (solved) return;
@@ -59,7 +59,7 @@ export default function Return0Puzzle() {
         setSolved(true);
         solvePuzzle("return0", "debug_puzzle");
         addKey("return0");
-        updateRoom("return0", { is_completed: true, key_collected: true });
+        completeRoomFrontend("return0");
         try {
           await roomAPI.completeRoom("return0", { timeTaken: 120 });
         } catch (_) {}

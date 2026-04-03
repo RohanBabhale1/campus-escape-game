@@ -16,7 +16,7 @@ export default function DynamightPuzzle() {
   const [playerInput, setPlayerInput] = useState([]);
   const [message, setMessage] = useState("Watch the pattern...");
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   useEffect(() => {
     if (phase !== "watch") return;
@@ -68,7 +68,7 @@ export default function DynamightPuzzle() {
           setMessage("PERFECT RHYTHM! Key acquired!");
           solvePuzzle("dynamight", "dance_pattern");
           addKey("dynamight");
-          updateRoom("dynamight", { is_completed: true, key_collected: true });
+          completeRoomFrontend("dynamight");
           try {
             await roomAPI.completeRoom("dynamight", { timeTaken: 100 });
           } catch (_) {}

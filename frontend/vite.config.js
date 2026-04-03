@@ -16,5 +16,19 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: false,
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('three')) return 'vendor-three';
+            if (id.includes('@react-three')) return 'vendor-r3f';
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) return 'vendor-react';
+            if (id.includes('zustand')) return 'vendor-zustand';
+            return 'vendor'; // all other node modules
+          }
+        }
+      }
+    }
   },
 });

@@ -34,6 +34,7 @@ export const authAPI = {
 
 export const gameAPI = {
   getOrCreateSession: () => api.get("/game/session"),
+  restartSession: () => api.post("/game/session/restart"),
   getProgress: () => api.get("/game/progress"),
   savePuzzleState: (data) => api.put("/game/progress/puzzle", data),
 };

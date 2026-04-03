@@ -66,8 +66,9 @@ export default function FinalPuzzle() {
   const [input, setInput] = useState("");
   const [message, setMessage] = useState("");
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom, setGameCompleted } =
+  const { closePuzzle, solvePuzzle, addKey } =
     useGameStore();
+  const completeRoomFrontend = useGameStore((s) => s.completeRoomFrontend);
 
   const handleSubmit = async () => {
     const phase = PHASES[phaseIdx];

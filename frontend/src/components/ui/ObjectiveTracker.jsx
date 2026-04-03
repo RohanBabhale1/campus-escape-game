@@ -6,8 +6,9 @@ export default function ObjectiveTracker() {
   const activeScene = useGameStore((s) => s.activeScene);
   const currentRoom = useGameStore((s) => s.currentRoom);
 
-  const nextRoom = rooms.find((r) => r.is_unlocked && !r.is_completed);
-  const totalDone = rooms.filter((r) => r.is_completed).length;
+  const nextRoom = rooms.find((r) => r.is_unlocked && !r.is_completed && r.slug !== "final");
+  const completedCount = rooms.filter((r) => r.is_completed && r.slug !== "final").length;
+  const totalDone = Math.min(8, completedCount);
 
   let objectiveText = "";
   if (activeScene === "lobby" || activeScene === "menu") {

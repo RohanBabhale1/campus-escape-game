@@ -142,4 +142,25 @@ const savePuzzleState = async (req, res, next) => {
   }
 };
 
-module.exports = { getOrCreateSession, getProgress, savePuzzleState };
+const restartSession = async (req, res, next) => {
+  try {
+    const { userId } = req.user;
+    
+    // Invalidate old active sessions
+    await db.query(
+      "UPDATE game_sessions SET is_active = FALSE WHERE user_id = $1 AND is_active = TRUE",
+      [userId]
+    );
+
+    // Provide immediate clean response so frontend can get a fresh one later
+    try {
+      await redisClient.del(`progress:${userId}`);
+    } catch (_) {}
+
+    res.json({ message: "Game session restarted." });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getOrCreateSession, getProgress, savePuzzleState, restartSession };

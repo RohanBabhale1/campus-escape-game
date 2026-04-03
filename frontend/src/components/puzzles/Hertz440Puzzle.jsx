@@ -20,7 +20,7 @@ export default function Hertz440Puzzle() {
   const [playerInput, setPlayerInput] = useState([]);
   const [message, setMessage] = useState("Watch the sequence...");
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   useEffect(() => {
     if (phase !== "watch") return;
@@ -62,7 +62,7 @@ export default function Hertz440Puzzle() {
       setMessage("PERFECT SEQUENCE! Key acquired!");
       solvePuzzle("hertz440", "note_sequence");
       addKey("hertz440");
-      updateRoom("hertz440", { is_completed: true, key_collected: true });
+      completeRoomFrontend("hertz440");
       try {
         await roomAPI.completeRoom("hertz440", { timeTaken: 90 });
       } catch (_) {}

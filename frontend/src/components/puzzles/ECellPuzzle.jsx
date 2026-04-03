@@ -46,7 +46,7 @@ export default function ECellPuzzle() {
   const [selected, setSelected] = useState(null);
   const [score, setScore] = useState(0);
   const [solved, setSolved] = useState(false);
-  const { closePuzzle, solvePuzzle, addKey, updateRoom } = useGameStore();
+  const { closePuzzle, solvePuzzle, addKey, completeRoomFrontend } = useGameStore();
 
   const handleAnswer = async (optIdx) => {
     if (selected !== null) return;
@@ -61,7 +61,7 @@ export default function ECellPuzzle() {
           setSolved(true);
           solvePuzzle("ecell", "business_decisions");
           addKey("ecell");
-          updateRoom("ecell", { is_completed: true, key_collected: true });
+          completeRoomFrontend("ecell");
           try {
             await roomAPI.completeRoom("ecell", { timeTaken: 90 });
           } catch (_) {}

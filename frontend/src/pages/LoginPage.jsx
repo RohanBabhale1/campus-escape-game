@@ -70,7 +70,7 @@ export default function LoginPage() {
         }}
       >
         {/* Title */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <div style={{ textAlign: "center", marginBottom: "30px" }}>
           <h1
             className="font-pixel text-pixel-xl text-neon-magenta text-glow-magenta animate-flicker"
             style={{
@@ -96,6 +96,23 @@ export default function LoginPage() {
           >
             COLLEGE EDITION
           </p>
+          <div style={{ marginTop: "16px" }}>
+            <p
+              style={{
+                fontFamily: '"Courier New", Courier, monospace',
+                fontSize: "0.9rem",
+                color: "rgba(255, 255, 255, 0.8)",
+                fontWeight: "bold",
+                background: "rgba(0, 0, 0, 0.5)",
+                padding: "8px 12px",
+                border: "1px dashed rgba(255, 255, 255, 0.3)",
+                display: "inline-block",
+                borderRadius: "4px"
+              }}
+            >
+              We should verify you. Please sign in
+            </p>
+          </div>
         </div>
 
         {/* Card */}
