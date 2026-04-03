@@ -10,7 +10,7 @@ const Auth = ({ onAuth }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const API_URL = 'http://localhost:5000/api';
+  const API_URL = '/api';
 
   const handleSubmit = async (e) => {
     e.preventDefault();

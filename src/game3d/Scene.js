@@ -81,11 +81,11 @@ export default function init3DScene(container, user, callbacks) {
 
   // Grass/Muddy green (Inside campus)
   const campusGround = new THREE.Mesh(
-    new THREE.PlaneGeometry(220, 150),
+    new THREE.PlaneGeometry(220, 200),
     new THREE.MeshStandardMaterial({ color: 0x4a5d23, roughness: 1 })
   );
   campusGround.rotation.x = -Math.PI / 2;
-  campusGround.position.set(0, 0.01, -80); // slightly elevated to avoid z-fighting
+  campusGround.position.set(0, 0.01, -105); // slightly elevated to avoid z-fighting
   campusGround.receiveShadow = true;
   scene.add(campusGround);
 
@@ -95,66 +95,81 @@ export default function init3DScene(container, user, callbacks) {
   const wallT = 2;
 
   // Left Wall
-  const leftWall = new THREE.Mesh(new THREE.BoxGeometry(wallT, wallH, 150), wallMat);
-  leftWall.position.set(-110, wallH/2, -80); leftWall.castShadow = true; leftWall.receiveShadow = true;
+  const leftWall = new THREE.Mesh(new THREE.BoxGeometry(wallT, wallH, 200), wallMat);
+  leftWall.position.set(-110, wallH/2, -105); leftWall.castShadow = true; leftWall.receiveShadow = true;
   scene.add(leftWall);
 
   // Right Wall
-  const rightWall = new THREE.Mesh(new THREE.BoxGeometry(wallT, wallH, 150), wallMat);
-  rightWall.position.set(110, wallH/2, -80); rightWall.castShadow = true; rightWall.receiveShadow = true;
+  const rightWall = new THREE.Mesh(new THREE.BoxGeometry(wallT, wallH, 200), wallMat);
+  rightWall.position.set(110, wallH/2, -105); rightWall.castShadow = true; rightWall.receiveShadow = true;
   scene.add(rightWall);
 
   // Back Wall
   const backWall = new THREE.Mesh(new THREE.BoxGeometry(220, wallH, wallT), wallMat);
-  backWall.position.set(0, wallH/2, -155); backWall.castShadow = true; backWall.receiveShadow = true;
+  backWall.position.set(0, wallH/2, -205); backWall.castShadow = true; backWall.receiveShadow = true;
   scene.add(backWall);
 
-  // Front Wall (aligned for road gap at x=65)
-  // Left side spans from X=-110 to X=57.5 (width 167.5, center -26.25)
-  const fwLeft = new THREE.Mesh(new THREE.BoxGeometry(167.5, wallH, wallT), wallMat);
-  fwLeft.position.set(-26.25, wallH/2, -5); fwLeft.castShadow = true; fwLeft.receiveShadow = true;
+  // Front Wall (gap width 18 at x = 45)
+  const fwLeft = new THREE.Mesh(new THREE.BoxGeometry(146, wallH, wallT), wallMat);
+  fwLeft.position.set(-37, wallH/2, -5); fwLeft.castShadow = true; fwLeft.receiveShadow = true;
   scene.add(fwLeft);
-
-  // Right side spans from X=72.5 to X=110 (width 37.5, center 91.25)
-  const fwRight = new THREE.Mesh(new THREE.BoxGeometry(37.5, wallH, wallT), wallMat);
-  fwRight.position.set(91.25, wallH/2, -5); fwRight.castShadow = true; fwRight.receiveShadow = true;
+  const fwRight = new THREE.Mesh(new THREE.BoxGeometry(56, wallH, wallT), wallMat);
+  fwRight.position.set(82, wallH/2, -5); fwRight.castShadow = true; fwRight.receiveShadow = true;
   scene.add(fwRight);
 
   // --- ROADS ---
   const roadMat = new THREE.MeshStandardMaterial({ color: 0x333333, roughness: 0.8 });
   const lineMat = new THREE.MeshStandardMaterial({ color: 0xffd700, roughness: 1 });
   
-  // Main vertical road tracking the Central-Right Spine (x=65)
-  const mainRoad = new THREE.Mesh(new THREE.PlaneGeometry(7, 180), roadMat);
+  // Main vertical road tracking the Central-Right Spine (x=45) ends at -135
+  const mainRoad = new THREE.Mesh(new THREE.PlaneGeometry(18, 175), roadMat);
   mainRoad.rotation.x = -Math.PI / 2;
-  mainRoad.position.set(65, 0.05, -50);
+  mainRoad.position.set(45, 0.05, -47.5);
   mainRoad.receiveShadow = true;
   scene.add(mainRoad);
 
   for(let i=0; i<18; i++) {
      const line = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 3), lineMat);
      line.rotation.x = -Math.PI / 2;
-     line.position.set(65, 0.06, 35 - i*10);
+     line.position.set(45, 0.06, 35 - i*10);
      scene.add(line);
   }
 
-  // Branch 1: Pi Block Plaza link (Z = -45) spans from X=65 to -45 (width 110)
-  const crossRoad1 = new THREE.Mesh(new THREE.PlaneGeometry(110, 7), roadMat);
+  // Branch 1: Pi Block Plaza link (Z = -45) spans from X=45 to -45 (width 90)
+  const crossRoad1 = new THREE.Mesh(new THREE.PlaneGeometry(90, 7), roadMat);
   crossRoad1.rotation.x = -Math.PI / 2;
-  crossRoad1.position.set(10, 0.05, -45);
+  crossRoad1.position.set(0, 0.05, -45);
   scene.add(crossRoad1);
 
-  // Branch 2: E Block Link (Z = -100) spans from 65 to 0 (width 65)
-  const crossRoad2 = new THREE.Mesh(new THREE.PlaneGeometry(65, 7), roadMat);
+  // Branch 2: E Block Link (Z = -84) spans from 45 to 0 (width 45)
+  const crossRoad2 = new THREE.Mesh(new THREE.PlaneGeometry(45, 7), roadMat);
   crossRoad2.rotation.x = -Math.PI / 2;
-  crossRoad2.position.set(32.5, 0.05, -100);
+  crossRoad2.position.set(22.5, 0.05, -84);
   scene.add(crossRoad2);
 
-  // Branch 3: Deep Campus Link (Z = -135) spans from 65 to -90 (width 155)
-  const crossRoad3 = new THREE.Mesh(new THREE.PlaneGeometry(155, 7), roadMat);
+  // Branch 3: Deep Campus Link (Z = -135) spans from 45 to -90 (width 135)
+  const crossRoad3 = new THREE.Mesh(new THREE.PlaneGeometry(135, 7), roadMat);
   crossRoad3.rotation.x = -Math.PI / 2;
-  crossRoad3.position.set(-12.5, 0.05, -135);
+  crossRoad3.position.set(-22.5, 0.05, -135);
   scene.add(crossRoad3);
+
+  // Branch 4: Path to Chai Tapri (Z = -70)
+  const crossRoad4 = new THREE.Mesh(new THREE.PlaneGeometry(40, 7), roadMat);
+  crossRoad4.rotation.x = -Math.PI / 2;
+  crossRoad4.position.set(65, 0.05, -70);
+  scene.add(crossRoad4);
+
+  // Branch 4b: Connect Chai Tapri link down to B-Block (Z = -80)
+  const crossRoad4b = new THREE.Mesh(new THREE.PlaneGeometry(7, 10), roadMat);
+  crossRoad4b.rotation.x = -Math.PI / 2;
+  crossRoad4b.position.set(85, 0.05, -75);
+  scene.add(crossRoad4b);
+
+  // Branch 5: Vertical link from H-Block Road (Z=-135) to G-Block (Z=-185) at X=-55
+  const crossRoad5 = new THREE.Mesh(new THREE.PlaneGeometry(7, 50), roadMat);
+  crossRoad5.rotation.x = -Math.PI / 2;
+  crossRoad5.position.set(-55, 0.05, -160);
+  scene.add(crossRoad5);
 
   // --- TREES ---
   const treeTrunkGeo = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
@@ -177,20 +192,44 @@ export default function init3DScene(container, user, callbacks) {
     scene.add(tree);
   };
 
-  // Line trees cleanly alongside the main road (X=65)
-  for(let z = -15; z >= -145; z -= 12) {
-      addTree(65 - 7, z); // Left side
-      addTree(65 + 7, z); // Right side
+  // Safely ensure trees do not punch through the concrete asphalt meshes
+  const isPointOnRoad = (x, z) => {
+      if (x > 36 && x < 54 && z > -140) return true; // Main Road Strip
+      if (z < -40 && z > -50 && x > -50 && x < 50) return true; // Pi Block junction
+      if (z < -80 && z > -88 && x > -5 && x < 50) return true; // E Block junction
+      if (z < -65 && z > -75 && x > 40 && x < 90) return true; // Chai Tapri horizontal
+      if (z < -130 && z > -140 && x > -95 && x < 50) return true; // Deep Campus horizontal
+      if (Math.sqrt((x-45)**2 + (z - -135)**2) < 15) return true; // Curved Roundabout island
+      return false;
+  };
+
+  // Line trees cleanly alongside the main road (X=45)
+  for(let z = -15; z >= -140; z -= 12) {
+      if (!isPointOnRoad(45 - 12, z)) addTree(45 - 12, z);
+      if (!isPointOnRoad(45 + 12, z)) addTree(45 + 12, z);
   }
   
   // Line trees elegantly along the Deep Campus Route (Z=-135)
   for(let x = 50; x >= -80; x -= 13) {
-      addTree(x, -135 + 6); // Bottom ledge
+      if (!isPointOnRoad(x, -129)) addTree(x, -129); // Bottom ledge
   }
 
   const gateGroup = new THREE.Group();
-  gateGroup.position.set(65, 0, -10);
+  gateGroup.position.set(45, 0, -10);
   scene.add(gateGroup);
+  
+  // Monument End at X=45, Z=-135
+  const monumentGroup = new THREE.Group();
+  monumentGroup.position.set(45, 0, -135);
+  const mBase = new THREE.Mesh(new THREE.CylinderGeometry(5.5, 5.5, 0.4, 32), new THREE.MeshStandardMaterial({ color: 0x666666 }));
+  mBase.position.y = 0.2; mBase.receiveShadow = true; monumentGroup.add(mBase);
+  scene.add(monumentGroup);
+
+  // Roundabout curved road
+  const curveRoad = new THREE.Mesh(new THREE.RingGeometry(5.5, 14, 32), roadMat);
+  curveRoad.rotation.x = -Math.PI / 2;
+  curveRoad.position.set(45, 0.052, -135);
+  scene.add(curveRoad);
   
   const silverMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, roughness: 0.3, metalness: 0.4 });
   const blockMat = new THREE.MeshStandardMaterial({ color: 0x222222, roughness: 0.9 });
@@ -198,30 +237,31 @@ export default function init3DScene(container, user, callbacks) {
   
   // Left Side (Asymmetric Complex Pillars)
   const leftInner = new THREE.Mesh(new THREE.BoxGeometry(3, 12, 4), silverMat);
-  leftInner.position.set(-5.5, 6, 0); leftInner.castShadow = true; leftInner.receiveShadow = true;
+  leftInner.position.set(-10.5, 6, 0); leftInner.castShadow = true; leftInner.receiveShadow = true;
   gateGroup.add(leftInner);
+
   const cabinWin = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 4.1), blockMat);
-  cabinWin.position.set(-5.5, 2.5, 0); gateGroup.add(cabinWin);
+  cabinWin.position.set(-10.5, 2.5, 0); gateGroup.add(cabinWin);
 
   const leftMid = new THREE.Mesh(new THREE.BoxGeometry(3, 16, 4), silverMat);
-  leftMid.position.set(-8.5, 8, 0); leftMid.castShadow = true; leftMid.receiveShadow = true;
+  leftMid.position.set(-13.5, 8, 0); leftMid.castShadow = true; leftMid.receiveShadow = true;
   gateGroup.add(leftMid);
 
   const leftOuter = new THREE.Mesh(new THREE.BoxGeometry(3, 14, 4), silverMat);
-  leftOuter.position.set(-11.5, 7, 0); leftOuter.castShadow = true; leftOuter.receiveShadow = true;
+  leftOuter.position.set(-16.5, 7, 0); leftOuter.castShadow = true; leftOuter.receiveShadow = true;
   gateGroup.add(leftOuter);
 
   // Right Side (Simpler Pillars)
   const rightInner = new THREE.Mesh(new THREE.BoxGeometry(4, 12, 4), silverMat);
-  rightInner.position.set(6, 6, 0); rightInner.castShadow = true; rightInner.receiveShadow = true;
+  rightInner.position.set(11, 6, 0); rightInner.castShadow = true; rightInner.receiveShadow = true;
   gateGroup.add(rightInner);
   
   const rightStone = new THREE.Mesh(new THREE.BoxGeometry(5, 5, 2), blockMat);
-  rightStone.position.set(10.5, 2.5, 0); rightStone.castShadow = true; rightStone.receiveShadow = true;
+  rightStone.position.set(15.5, 2.5, 0); rightStone.castShadow = true; rightStone.receiveShadow = true;
   gateGroup.add(rightStone);
 
   // Top Fascia Beam
-  const topBeam = new THREE.Mesh(new THREE.BoxGeometry(30, 3.5, 4.2), beamMat);
+  const topBeam = new THREE.Mesh(new THREE.BoxGeometry(40, 3.5, 4.2), beamMat);
   topBeam.position.set(0, 13.75, 0); topBeam.castShadow = true; topBeam.receiveShadow = true;
   gateGroup.add(topBeam);
 
@@ -354,7 +394,7 @@ export default function init3DScene(container, user, callbacks) {
     body.position.y = bHeight / 2; body.castShadow = true; group.add(body);
     
     // Green surrounding floor covering a larger area around it
-    const grassMat = new THREE.MeshStandardMaterial({ color: 0x27ae60, roughness: 0.9 });
+    const grassMat = new THREE.MeshStandardMaterial({ color: 0x4a5d23, roughness: 0.9 });
     const floorW = bWidth + 20; const floorD = bDepth + 20;
     const grassFloor = new THREE.Mesh(new THREE.PlaneGeometry(floorW, floorD), grassMat);
     grassFloor.rotation.x = -Math.PI / 2;
@@ -362,7 +402,7 @@ export default function init3DScene(container, user, callbacks) {
     grassFloor.receiveShadow = true;
     scene.add(grassFloor);
 
-    addWindows(group, 0, 0, 0, bWidth, bHeight, bDepth, 4, 1, bWidth - 2, 1.5, 0xbdc3c7);
+    addWindows(group, 0, 0, 0, bWidth, bHeight, bDepth, 4, 3, 5, 1.5, 0xbdc3c7);
     scene.add(group); buildingsList.push({ group, name: "b-block", bHeight, bDepth });
   };
 
@@ -451,44 +491,150 @@ export default function init3DScene(container, user, callbacks) {
   const createGBlock = (x, z) => {
     const group = new THREE.Group(); group.position.set(x, 0, z);
     const bHeight = 18; const bWidth = 18; const bDepth = 18;
-    const mat = new THREE.MeshStandardMaterial({ color: 0x8e24aa, roughness: 0.5 });
+    const mat = new THREE.MeshStandardMaterial({ color: 0xffccb6, roughness: 0.5 });
     const body = new THREE.Mesh(new THREE.BoxGeometry(bWidth, bHeight, bDepth), mat); body.position.y = bHeight / 2; body.castShadow = true; group.add(body);
     const block1 = new THREE.Mesh(new THREE.BoxGeometry(bWidth+4, 6, bDepth-4), mat); block1.position.y = bHeight/2 - 4; block1.castShadow = true; group.add(block1);
     const block2 = new THREE.Mesh(new THREE.BoxGeometry(bWidth-4, 6, bDepth+4), mat); block2.position.y = bHeight/2 + 4; block2.castShadow = true; group.add(block2);
-    addWindows(group, 0, 0, 0, bWidth, bHeight, bDepth, 3, 3, 2, 2, 0xce93d8);
+    addWindows(group, 0, 0, 0, bWidth, bHeight, bDepth, 3, 3, 2, 2, 0xffe6e6);
     // Add text slightly shifted forward because of staggered blocks
     scene.add(group); buildingsList.push({ group, name: "g-block", bHeight, bDepth: bDepth + 4 }); 
   };
 
   const createHBlock = (x, z) => {
     const group = new THREE.Group(); group.position.set(x, 0, z);
-    const bHeight = 15; const bDepth = 20; const sideW = 5; const centerW = 10;
-    const mat = new THREE.MeshStandardMaterial({ color: 0xe53935, roughness: 0.6 });
+    group.rotation.y = Math.PI / 2; // 90 degree anticlockwise rotation
+    const bHeight = 8; const bDepth = 20; const sideW = 5; const centerW = 10;
+    const mat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.6 });
     const leftWing = new THREE.Mesh(new THREE.BoxGeometry(sideW, bHeight, bDepth), mat); leftWing.position.set(-centerW/2 - sideW/2, bHeight/2, 0); leftWing.castShadow = true; group.add(leftWing);
     const rightWing = new THREE.Mesh(new THREE.BoxGeometry(sideW, bHeight, bDepth), mat); rightWing.position.set(centerW/2 + sideW/2, bHeight/2, 0); rightWing.castShadow = true; group.add(rightWing);
     const bridge = new THREE.Mesh(new THREE.BoxGeometry(centerW, bHeight, 5), mat); bridge.position.set(0, bHeight/2, 0); bridge.castShadow = true; group.add(bridge);
-    addWindows(group, -centerW/2 - sideW/2, 0, 0, sideW, bHeight, bDepth, 4, 1, 2, 1.5, 0xffcdd2);
-    addWindows(group, centerW/2 + sideW/2, 0, 0, sideW, bHeight, bDepth, 4, 1, 2, 1.5, 0xffcdd2);
-    addWindows(group, 0, 0, 0, centerW, bHeight, 5, 4, 3, 1.5, 1.5, 0xffcdd2);
+    addWindows(group, -centerW/2 - sideW/2, 0, 0, sideW, bHeight, bDepth, 2, 1, 2, 1.5, 0xbdc3c7);
+    addWindows(group, centerW/2 + sideW/2, 0, 0, sideW, bHeight, bDepth, 2, 1, 2, 1.5, 0xbdc3c7);
+    addWindows(group, 0, 0, 0, centerW, bHeight, 5, 2, 3, 1.5, 1.5, 0xbdc3c7);
     scene.add(group); buildingsList.push({ group, name: "h-block", bHeight, bDepth });
   };
 
-  const createSmallBlock = (x, z, color, name) => {
+  const createSmallBlock = (x, z, color, name, rot = 0) => {
     const group = new THREE.Group(); group.position.set(x, 0, z);
-    const bHeight = 8; const bWidth = 8; const bDepth = 8;
-    const mat = new THREE.MeshStandardMaterial({ color: color, roughness: 0.8 });
-    const body = new THREE.Mesh(new THREE.BoxGeometry(bWidth, bHeight, bDepth), mat);
-    body.position.y = bHeight / 2; body.castShadow = true; group.add(body);
+    group.rotation.y = rot;
+    const bHeight = 7; const bWidth = 8; const bDepth = 6;
+    const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.8 });
+    const body = new THREE.Mesh(new THREE.BoxGeometry(bWidth, bHeight, bDepth), mat); body.position.y = bHeight / 2; body.castShadow = true; group.add(body);
+    addWindows(group, 0, 0, 0, bWidth, bHeight, bDepth, 1, 2, 1.5, 1.5, 0xecf0f1);
     scene.add(group); buildingsList.push({ group, name, bHeight, bDepth });
   };
 
   createEBlock(0, -100);
   createBBlock(85, -80);
-  createSmallBlock(55, -70, 0xffd700, "Chai Tapri");
-  createSmallBlock(55, -90, 0x95a5a6, "Juice Tapri");
+  createSmallBlock(55, -78, 0xffd700, "Chai Tapri", -Math.PI / 2);
+  createSmallBlock(55, -92, 0x95a5a6, "Juice Tapri", -Math.PI / 2);
   createPiBlock(-45, -45);
-  createGBlock(-55, -135);
+  createGBlock(-55, -185);
   createHBlock(-90, -135);
+
+  // --- PLAYGROUND & POND ---
+  // Playground (Rectangular muddy green field with white outline)
+  const playgroundGroup = new THREE.Group();
+  playgroundGroup.position.set(0, 0.05, -155); // Adjusted position to be right next to the road
+  
+  const fieldGeo = new THREE.PlaneGeometry(50, 32);
+  const fieldMat = new THREE.MeshStandardMaterial({ color: 0x4a5d3f, roughness: 1 }); // Muddy green
+  const field = new THREE.Mesh(fieldGeo, fieldMat);
+  field.rotation.x = -Math.PI / 2;
+  field.receiveShadow = true;
+  playgroundGroup.add(field);
+
+  // Outline
+  const lineMatWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const hLineGeo = new THREE.PlaneGeometry(48, 1);
+  const vLineGeo = new THREE.PlaneGeometry(1, 30);
+  
+  const lTop = new THREE.Mesh(hLineGeo, lineMatWhite); lTop.rotation.x = -Math.PI / 2; lTop.position.set(0, 0.01, -15); playgroundGroup.add(lTop);
+  const lBot = new THREE.Mesh(hLineGeo, lineMatWhite); lBot.rotation.x = -Math.PI / 2; lBot.position.set(0, 0.01, 15); playgroundGroup.add(lBot);
+  const lLeft = new THREE.Mesh(vLineGeo, lineMatWhite); lLeft.rotation.x = -Math.PI / 2; lLeft.position.set(-23.5, 0.01, 0); playgroundGroup.add(lLeft);
+  const lRight = new THREE.Mesh(vLineGeo, lineMatWhite); lRight.rotation.x = -Math.PI / 2; lRight.position.set(23.5, 0.01, 0); playgroundGroup.add(lRight);
+  
+  scene.add(playgroundGroup);
+
+  // Pond (Blue irregular organic shape)
+  const pondShape = new THREE.Shape();
+  pondShape.moveTo(0, 10);
+  pondShape.bezierCurveTo(10, 10, 15, 5, 20, 0);
+  pondShape.bezierCurveTo(25, -5, 20, -15, 10, -15);
+  pondShape.bezierCurveTo(0, -15, -5, -20, -15, -10);
+  pondShape.bezierCurveTo(-20, -5, -15, 10, 0, 10);
+
+  const pondGeo = new THREE.ShapeGeometry(pondShape);
+  const pondMat = new THREE.MeshStandardMaterial({ color: 0x1ca3ec, roughness: 0.1, metalness: 0.2 });
+  const pond = new THREE.Mesh(pondGeo, pondMat);
+  pond.rotation.x = -Math.PI / 2;
+  pond.position.set(90, 0.04, -185); // Shifted rightmost backward side
+  pond.receiveShadow = true;
+  scene.add(pond);
+
+  // --- CRICKET NET ---
+  const createCricketNet = (x, z) => {
+    const group = new THREE.Group();
+    group.position.set(x, 0.05, z);
+    group.rotation.y = -Math.PI / 6; // Angled slightly for organic placement
+    
+    // Pitch
+    const pitchMat = new THREE.MeshStandardMaterial({ color: 0xc19a6b, roughness: 1 });
+    const pitchGeo = new THREE.PlaneGeometry(6, 25);
+    const pitch = new THREE.Mesh(pitchGeo, pitchMat);
+    pitch.rotation.x = -Math.PI / 2;
+    pitch.receiveShadow = true;
+    group.add(pitch);
+
+    // Net Material via Wireframe
+    const netMat = new THREE.MeshBasicMaterial({ color: 0xcccccc, wireframe: true, transparent: true, opacity: 0.6 });
+    
+    // Back net
+    const backGeo = new THREE.PlaneGeometry(6, 4, 12, 8);
+    const backNet = new THREE.Mesh(backGeo, netMat);
+    backNet.position.set(0, 2, -12.5);
+    group.add(backNet);
+
+    // Side net 1
+    const sideGeo = new THREE.PlaneGeometry(15, 4, 30, 8);
+    const side1 = new THREE.Mesh(sideGeo, netMat);
+    side1.position.set(-3, 2, -5);
+    side1.rotation.y = Math.PI / 2;
+    group.add(side1);
+
+    // Side net 2
+    const side2 = new THREE.Mesh(sideGeo, netMat);
+    side2.position.set(3, 2, -5);
+    side2.rotation.y = -Math.PI / 2;
+    group.add(side2);
+
+    // Support Poles
+    const poleGeo = new THREE.CylinderGeometry(0.1, 0.1, 4);
+    const poleMat = new THREE.MeshStandardMaterial({ color: 0x444444 });
+    const positions = [
+      [-3, 2, -12.5], [3, 2, -12.5], 
+      [-3, 2, 2.5], [3, 2, 2.5], 
+      [-3, 2, -5], [3, 2, -5]
+    ];
+    positions.forEach(pos => {
+      const pole = new THREE.Mesh(poleGeo, poleMat);
+      pole.position.set(...pos);
+      group.add(pole);
+    });
+
+    // Wickets
+    const wicketGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.8);
+    const wicketMat = new THREE.MeshStandardMaterial({ color: 0xffeebb });
+    for(let i=-0.3; i<=0.3; i+=0.3) {
+      const wicket = new THREE.Mesh(wicketGeo, wicketMat);
+      wicket.position.set(i, 0.4, -10);
+      group.add(wicket);
+    }
+    
+    scene.add(group);
+  };
+  
+  createCricketNet(-70, -100);
 
   // Load font & Labels
   const fontLoader = new FontLoader();
@@ -520,7 +666,27 @@ export default function init3DScene(container, user, callbacks) {
       const labelMat = new THREE.MeshStandardMaterial({ color: 0x000000 });
       const labelMesh = new THREE.Mesh(labelGeo, labelMat);
       labelGeo.computeBoundingBox();
-      const lxOffset = -0.5 * (labelGeo.boundingBox.max.x - labelGeo.boundingBox.min.x);
+      const textWidth = labelGeo.boundingBox.max.x - labelGeo.boundingBox.min.x;
+      
+      // Temporarily store original rotation to calculate purely local bounds
+      const originalRotation = b.group.rotation.clone();
+      b.group.rotation.set(0, 0, 0);
+      b.group.updateMatrixWorld();
+      
+      const bBox = new THREE.Box3().setFromObject(b.group);
+      const groupWidth = bBox.max.x - bBox.min.x;
+      
+      // Restore rotation
+      b.group.rotation.copy(originalRotation);
+      b.group.updateMatrixWorld();
+      
+      let scale = 1.0;
+      if (textWidth > groupWidth * 0.9) {
+          scale = (groupWidth * 0.9) / textWidth;
+          labelMesh.scale.set(scale, scale, scale);
+      }
+
+      const lxOffset = -0.5 * textWidth * scale;
       
       // Position on the front face of the building, near the top
       labelMesh.position.set(lxOffset, b.bHeight - 1, b.bDepth / 2 + 0.1);
@@ -547,15 +713,15 @@ export default function init3DScene(container, user, callbacks) {
     player = gltf.scene;
     player.scale.set(1.5, 1.5, 1.5);
     
-    // Explicitly set spawn anchor exactly outside the right-shifted gate
-    player.position.set(65, 0, 2); 
+    // Explicitly set spawn anchor exactly outside the newly shifted gate
+    player.position.set(45, 0, 2); 
 
     player.traverse(n => { if (n.isMesh) { n.castShadow = true; n.receiveShadow = true; } });
     scene.add(player);
     lastPlayerPos.copy(player.position);
 
     // Give it a slightly angled back initial look and set the initial orbit target to player's head
-    camera.position.set(65, 10, 22);
+    camera.position.set(45, 10, 22);
     controls.target.copy(player.position).add(new THREE.Vector3(0, 2, 0));
     controls.update();
 
@@ -586,11 +752,21 @@ export default function init3DScene(container, user, callbacks) {
   window.addEventListener("keydown", (e) => {
     handleKey(e, true);
     if (e.key.toLowerCase() === "e") {
-      if (player && player.position.distanceTo(new THREE.Vector3(-45, 0, -45)) < 55) {
+      if (player && player.position.distanceTo(new THREE.Vector3(-45, 0, -45)) < 18) {
         isObjectivesOpen = !isObjectivesOpen;
-        if (callbacks && callbacks.onObjToggle) {
-          callbacks.onObjToggle(isObjectivesOpen);
-        }
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'pi');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(0, 0, -85)) < 20) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'eblock');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(55, 0, -78)) < 15) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'chai');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(55, 0, -92)) < 15) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'juice');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(-70, 0, -100)) < 20) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'cricket');
       }
     }
   });
@@ -608,7 +784,7 @@ export default function init3DScene(container, user, callbacks) {
   const playerVelocity = new THREE.Vector3();
   const cameraOffset = new THREE.Vector3(0, 10, 18);
   let animationId;
-  let wasNearPi = false;
+  let activeZone = null;
 
   const animate = () => {
     if (isDestroyed) return;
@@ -618,11 +794,23 @@ export default function init3DScene(container, user, callbacks) {
     if (player) {
       if (mixer) mixer.update(delta);
 
-      const isNearPi = player.position.distanceTo(new THREE.Vector3(-45, 0, -45)) < 55;
-      if (isNearPi !== wasNearPi) {
-        wasNearPi = isNearPi;
-        if (callbacks && callbacks.onPrompt) callbacks.onPrompt(isNearPi);
-        if (!isNearPi && isObjectivesOpen) {
+      const isNearPi = player.position.distanceTo(new THREE.Vector3(-45, 0, -45)) < 18;
+      const isNearEBlock = player.position.distanceTo(new THREE.Vector3(0, 0, -85)) < 20;
+      const isNearChai = player.position.distanceTo(new THREE.Vector3(55, 0, -78)) < 15;
+      const isNearJuice = player.position.distanceTo(new THREE.Vector3(55, 0, -92)) < 15;
+      const isNearCricket = player.position.distanceTo(new THREE.Vector3(-70, 0, -100)) < 20;
+      
+      let currentZone = null;
+      if (isNearPi) currentZone = 'pi';
+      else if (isNearEBlock) currentZone = 'eblock';
+      else if (isNearChai) currentZone = 'chai';
+      else if (isNearJuice) currentZone = 'juice';
+      else if (isNearCricket) currentZone = 'cricket';
+
+      if (currentZone !== activeZone) {
+        activeZone = currentZone;
+        if (callbacks && callbacks.onPrompt) callbacks.onPrompt(currentZone);
+        if (!currentZone && isObjectivesOpen) {
            isObjectivesOpen = false;
            if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(false);
         }
@@ -677,14 +865,45 @@ export default function init3DScene(container, user, callbacks) {
         }
       }
 
-      // Apply scaled velocity with Building Collisions
+      // Apply scaled velocity with Accurate Sub-Mesh Collisions
       const oldPosition = player.position.clone();
       player.position.addScaledVector(playerVelocity, delta);
 
-      const playerBox = new THREE.Box3().setFromObject(player);
+      const playerBox = new THREE.Box3();
+      playerBox.setFromCenterAndSize(
+        new THREE.Vector3(player.position.x, player.position.y + 2, player.position.z),
+        new THREE.Vector3(1.2, 4, 1.2)
+      );
+
       let collision = false;
-      for (const b of buildingsList) {
-        const bBox = new THREE.Box3().setFromObject(b.group);
+
+      if (!scene.userData.staticColliders) {
+          scene.userData.staticColliders = [];
+          const collectColliders = (obj) => {
+              if (!obj) return;
+              if (obj.isMesh) {
+                  const box = new THREE.Box3().setFromObject(obj);
+                  // Only consider solid meshes that touch the walkable ground zone
+                  if (box.min.y <= 4 && box.max.y > 0.5) {
+                      scene.userData.staticColliders.push(box);
+                  }
+              }
+              if (obj.children) {
+                  obj.children.forEach(collectColliders);
+              }
+          };
+          
+          collectColliders(fwLeft);
+          collectColliders(fwRight);
+          collectColliders(leftWall);
+          collectColliders(rightWall);
+          collectColliders(backWall);
+          collectColliders(gateGroup);
+          collectColliders(monumentGroup);
+          buildingsList.forEach(b => collectColliders(b.group));
+      }
+
+      for (const bBox of scene.userData.staticColliders) {
         if (playerBox.intersectsBox(bBox)) {
           collision = true;
           break;
