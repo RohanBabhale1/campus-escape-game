@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   clubverse-db:
     image: postgres:15
@@ -12,5 +11,42 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./server/init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - clubverse-network
+
+  clubverse-backend:
+    build:
+      context: ./server
+    container_name: clubverse-backend
+    environment:
+      PORT: 5000
+      DB_USER: clubuser
+      DB_PASSWORD: clubpassword
+      DB_HOST: clubverse-db
+      DB_PORT: 5432
+      DB_NAME: clubversedb
+      JWT_SECRET: supersecretclubversekey
+    ports:
+      - "5000:5000"
+    depends_on:
+      - clubverse-db
+    networks:
+      - clubverse-network
+
+  clubverse-frontend:
+    build:
+      context: .
+    container_name: clubverse-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - clubverse-backend
+    networks:
+      - clubverse-network
+
 volumes:
   postgres_data:
+
+networks:
+  clubverse-network:
+    driver: bridge
