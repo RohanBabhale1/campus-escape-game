@@ -6,6 +6,7 @@ import DirectorDetails from "./DirectorDetails";
 import BoardDetails from "./BoardDetails";
 import StaffDetails from "./StaffDetails";
 import CricketGame from "./CricketGame";
+import FootballGame from "./FootballGame";
 
 const GameCanvas3D = ({ user }) => {
   const ref = useRef();
@@ -52,11 +53,16 @@ const GameCanvas3D = ({ user }) => {
         <div style={styles.prompt}>
           Press <b>E</b> to {
             showPrompt === 'cricket' ? 'Play Cricket Mini-Game' : 
+            showPrompt === 'football' ? 'Play Football Mini-Game' :
+            showPrompt === 'gallery' ? 'View Campus Gallery' :
             'view ' + (
               showPrompt === 'pi' ? 'Main Objectives' : 
               showPrompt === 'eblock' ? 'E-Block Objectives' : 
               showPrompt === 'chai' ? 'Chai Tapri Menu' : 
-              'Juice Tapri Menu'
+              showPrompt === 'juice' ? 'Juice Tapri Menu' :
+              showPrompt === 'hblock' ? 'H Block Services' :
+              showPrompt === 'gblock' ? 'G Block Info' :
+              'B Block Info'
             )
           }
         </div>
@@ -152,6 +158,45 @@ const GameCanvas3D = ({ user }) => {
             </div>
           ) : showObjectives === 'cricket' ? (
             <CricketGame onClose={() => setShowObjectives(null)} />
+          ) : showObjectives === 'football' ? (
+            <FootballGame onClose={() => setShowObjectives(null)} />
+          ) : showObjectives === 'hblock' ? (
+             <div style={styles.modalCard}>
+               <h2 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #444', paddingBottom: '10px' }}>🏋️ H-Block Services</h2>
+               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                 <div style={{...styles.gridCard, minHeight: '80px', justifyContent: 'center'}}><h3>GYM</h3></div>
+                 <div style={{...styles.gridCard, minHeight: '80px', justifyContent: 'center'}}><h3>Music Room</h3></div>
+                 <div style={{...styles.gridCard, minHeight: '80px', justifyContent: 'center'}}><h3>Dance Room</h3></div>
+                 <div style={{...styles.gridCard, minHeight: '80px', justifyContent: 'center'}}><h3>Canteen</h3></div>
+               </div>
+               <div style={{ marginTop: '20px', textAlign: 'right' }}>
+                 <button onClick={() => setShowObjectives(null)} style={styles.closeBtn}>Close</button>
+               </div>
+             </div>
+          ) : showObjectives === 'gblock' ? (
+             <div style={styles.modalCard}>
+               <h2 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #444', paddingBottom: '10px' }}>🏢 G-Block Info</h2>
+               <p style={{ fontSize: '18px', lineHeight: '1.5' }}>This building has the capacity of accommodating 600 people.</p>
+               <div style={{ marginTop: '20px', textAlign: 'right' }}>
+                 <button onClick={() => setShowObjectives(null)} style={styles.closeBtn}>Close</button>
+               </div>
+             </div>
+          ) : showObjectives === 'bblock' ? (
+             <div style={styles.modalCard}>
+               <h2 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #444', paddingBottom: '10px' }}>🏢 B-Block Info</h2>
+               <p style={{ fontSize: '18px', lineHeight: '1.5' }}>4 Floor building.<br/>800 people capacity with up to 4-5 people per room.</p>
+               <div style={{ marginTop: '20px', textAlign: 'right' }}>
+                 <button onClick={() => setShowObjectives(null)} style={styles.closeBtn}>Close</button>
+               </div>
+             </div>
+          ) : showObjectives === 'gallery' ? (
+             <div style={{...styles.modalCard, width: '80%', height: '80%', display: 'flex', flexDirection: 'column'}}>
+               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                 <h2 style={{margin: 0}}>🖼️ Campus Gallery</h2>
+                 <button onClick={() => setShowObjectives(null)} style={styles.closeBtn}>Close</button>
+               </div>
+               <iframe src="https://iiitdwd.ac.in/gallery/" style={{width: '100%', flex: 1, border: 'none', background: '#fff', borderRadius: '8px'}} title="Gallery View" />
+             </div>
           ) : (
             <div style={styles.modalCard}>
               <h2 style={{ margin: '0 0 15px 0', borderBottom: '1px solid #444', paddingBottom: '10px' }}>📜 Main Objectives</h2>

@@ -767,6 +767,21 @@ export default function init3DScene(container, user, callbacks) {
       } else if (player && player.position.distanceTo(new THREE.Vector3(-70, 0, -100)) < 20) {
         isObjectivesOpen = !isObjectivesOpen;
         if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'cricket');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(0, 0, -155)) < 25) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'football');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(75, 0, -80)) < 15) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'bblock');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(-80, 0, -135)) < 15) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'hblock');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(-55, 0, -185)) < 18) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'gblock');
+      } else if (player && player.position.distanceTo(new THREE.Vector3(90, 0, -185)) < 20) {
+        isObjectivesOpen = !isObjectivesOpen;
+        if (callbacks && callbacks.onObjToggle) callbacks.onObjToggle(isObjectivesOpen, 'gallery');
       }
     }
   });
@@ -799,6 +814,11 @@ export default function init3DScene(container, user, callbacks) {
       const isNearChai = player.position.distanceTo(new THREE.Vector3(55, 0, -78)) < 15;
       const isNearJuice = player.position.distanceTo(new THREE.Vector3(55, 0, -92)) < 15;
       const isNearCricket = player.position.distanceTo(new THREE.Vector3(-70, 0, -100)) < 20;
+      const isNearFootball = player.position.distanceTo(new THREE.Vector3(0, 0, -155)) < 25;
+      const isNearBBlock = player.position.distanceTo(new THREE.Vector3(75, 0, -80)) < 15;
+      const isNearHBlock = player.position.distanceTo(new THREE.Vector3(-80, 0, -135)) < 15;
+      const isNearGBlock = player.position.distanceTo(new THREE.Vector3(-55, 0, -185)) < 18;
+      const isNearGallery = player.position.distanceTo(new THREE.Vector3(90, 0, -185)) < 20;
       
       let currentZone = null;
       if (isNearPi) currentZone = 'pi';
@@ -806,6 +826,11 @@ export default function init3DScene(container, user, callbacks) {
       else if (isNearChai) currentZone = 'chai';
       else if (isNearJuice) currentZone = 'juice';
       else if (isNearCricket) currentZone = 'cricket';
+      else if (isNearFootball) currentZone = 'football';
+      else if (isNearBBlock) currentZone = 'bblock';
+      else if (isNearHBlock) currentZone = 'hblock';
+      else if (isNearGBlock) currentZone = 'gblock';
+      else if (isNearGallery) currentZone = 'gallery';
 
       if (currentZone !== activeZone) {
         activeZone = currentZone;

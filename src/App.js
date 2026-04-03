@@ -4,6 +4,7 @@ import axios from 'axios';
 import GameCanvas3D from "./components/GameCanvas3D";
 import HUD from "./components/HUD";
 import Auth from "./components/Auth";
+import Chat from "./components/Chat";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -59,6 +60,7 @@ function App() {
               <div style={{ width: '100%', height: '100vh', position: 'relative' }}>
                 <HUD />
                 <GameCanvas3D user={user} />
+                <Chat user={user} />
               </div>
             ) : (
               <Navigate to="/login" />

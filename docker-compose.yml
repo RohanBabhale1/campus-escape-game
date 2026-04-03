@@ -14,6 +14,14 @@ services:
     networks:
       - clubverse-network
 
+  redis:
+    image: redis:alpine
+    container_name: clubverse-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - clubverse-network
+
   clubverse-backend:
     build:
       context: ./server
@@ -26,10 +34,12 @@ services:
       DB_PORT: 5432
       DB_NAME: clubversedb
       JWT_SECRET: supersecretclubversekey
+      REDIS_URL: redis://redis:6379
     ports:
       - "5000:5000"
     depends_on:
       - clubverse-db
+      - redis
     networks:
       - clubverse-network
 

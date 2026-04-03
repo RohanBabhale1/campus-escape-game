@@ -23,26 +23,7 @@ const HUD = () => {
       pointerEvents: 'none',
       zIndex: 10
     }}>
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        padding: '20px',
-      }}>
-        <h1 style={{
-          margin: 0,
-          color: '#fff',
-          fontSize: '2rem',
-          fontWeight: '900',
-          letterSpacing: '4px',
-          textTransform: 'uppercase',
-          textShadow: '0 0 10px rgba(0,0,0,0.5)',
-          background: 'linear-gradient(45deg, #00d2ff, #3a7bd5)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}>
-          ClubVerse 3D
-        </h1>
-      </div>
+
       
       <div style={{
         position: 'absolute',
